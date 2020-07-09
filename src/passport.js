@@ -2,9 +2,10 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const moment = require('moment');
-
 const User = require('./models/User');
-
+const passportJWT = require("passport-jwt");
+const JWTStrategy   = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 // Creamos los salts de bcrypt
 const saltRounds = 10;
 
@@ -114,15 +115,17 @@ passport.use(
     )
 );
 
-passport.serializeUser((user, done) => {
-    return done(null, user._id);
-});
-
-passport.deserializeUser(async (user, done) => {
-    try {
-        const user = User.findById(user._id);
-        return done(null, user);
-    } catch (err) {
-        return done(err);
+passport.use(new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        secretOrKey   : 'sdsad'
+    },
+    function (jwtPayload, cb) {
+        return User.findOneById(jwtPayload.id)
+            .then(user => {
+                return cb(null, user);
+            })
+            .catch(err => {
+                return cb(err);
+            });
     }
-});
+));
