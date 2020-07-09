@@ -1,6 +1,6 @@
 // Requires official MongoShell 3.6+
             use maleteo;
-            db.getCollection("locker").aggregate(
+            db.getCollection("lockers").aggregate(
                 [
                     {
                         "$project" : {
