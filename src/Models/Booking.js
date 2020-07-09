@@ -16,6 +16,12 @@ const BookingsSchema = new Schema(
         }, disputes : {
             type: Array,
             require: false
+        }, lockerID: {
+            type: String,
+            require: true
+        }, space: {
+            type: Number,
+            require: true
         }
     },
     {

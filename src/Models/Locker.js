@@ -4,11 +4,7 @@ const Schema = mongoose.Schema;
 
 const LockerSchema = new Schema(
     {
-        email: {
-            type: String,
-            unique: true,
-            require: true
-        }, name: {
+        name: {
             type: String,
             require: true
         }, description: {
@@ -20,10 +16,7 @@ const LockerSchema = new Schema(
         }, ratings: {
             type: Array,
             require: false
-        }, password: {
-            type: String,
-            require: true
-        }, availableSpace: {
+        }, space: {
             type: Number,
             require: false
         }, lockerType: {
@@ -32,6 +25,9 @@ const LockerSchema = new Schema(
         }, price: {
             type: Number,
             require: true
+        }, bookingID: {
+            type: String,
+            require: false
         }
     },
     {
