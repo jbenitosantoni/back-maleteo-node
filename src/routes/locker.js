@@ -7,6 +7,51 @@ const moment = require('moment');
 const momentRange = require('moment-range');
 momentRange.extendMoment(moment);
 
+router.post('/', async (req, res, next) => {
+    if (req.user) {
+        try {
+            if (!req.body.id) {
+                const error = "You must send user ID";
+                return res.status(401).send(error);
+            }
+            const id = req.body.id;
+            const user = await User.findById(id);
+            const email = user.email;
+
+            if (!(req.user === email)) {
+                const error = "Token Invalido";
+                return res.status(401).send(error);
+            }
+
+            if (user.isGuardian === false) {
+                const error = "You are not a guardian!";
+                return res.status(401).send(error);
+            }
+
+            if (req.body.lockerType !== 'Casa' || req.body.lockerType !== 'Hotel' || req.body.lockerType !== 'Tienda' || req.body.lockerType !== 'Trastero') {
+                const error = "Locker inputs types can only be Casa Hotel Tienda or Trastero!";
+                return res.status(401).send(error);
+            }
+
+            const newLocker = new Locker({
+                name: req.body.name,
+                description: req.body.description,
+                location: req.body.location,
+                space: req.body.space,
+                lockerType: req.body.lockerType,
+                price: req.body.price
+            });
+
+            const savedLocker = await newLocker.save();
+
+            return res.status(201).send(savedLocker);
+
+        } catch (err) {
+            next(err);
+        }
+    }
+});
+
 router.get('/', async (req, res, next) => {
     if (req.user) {
         try {
@@ -23,6 +68,7 @@ router.get('/', async (req, res, next) => {
             let lockersDisponibles = [];
             const checkIn = new Date(req.body.checkIn);
             const checkOut = new Date(req.body.checkOut);
+
             for (let i = 0; i < lockers.length; i++) {
                 let bookingID = []
                 bookingID.push(lockers[i].bookingID);
@@ -45,6 +91,7 @@ router.get('/', async (req, res, next) => {
                     }
                 }
             }
+
         res.send(lockersDisponibles);
         } catch (err) {
             next(err);
