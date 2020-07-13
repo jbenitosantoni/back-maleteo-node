@@ -28,6 +28,9 @@ const LockerSchema = new Schema(
         }, userID: {
             type: String,
             require: true
+        }, photos: {
+            type: Array,
+            require: true
         }
     },
     {
