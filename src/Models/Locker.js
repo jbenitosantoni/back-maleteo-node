@@ -25,9 +25,9 @@ const LockerSchema = new Schema(
         }, price: {
             type: Double,
             require: true
-        }, bookingID: {
+        }, userID: {
             type: String,
-            require: false
+            require: true
         }
     },
     {

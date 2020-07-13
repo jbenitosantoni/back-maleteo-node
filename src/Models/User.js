@@ -33,12 +33,6 @@ const UserSchema = new Schema(
             type: Boolean,
             require: false,
             default: false
-        }, guardianLockers: {
-            type: Array,
-            require: false
-        }, bookings: {
-            type: Array,
-            require: false
         }, googleID: {
             type: String,
             require: false

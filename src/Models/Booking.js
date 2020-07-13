@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Double = require('@mongoosejs/double');
 
 const Schema = mongoose.Schema;
 
@@ -22,7 +23,13 @@ const BookingsSchema = new Schema(
         }, space: {
             type: Number,
             require: true
-        }
+        }, finalPrice: {
+            type: Double,
+            require: true
+        } , userID: {
+            type: String,
+            require: true
+        },
     },
     {
         timestamps: true

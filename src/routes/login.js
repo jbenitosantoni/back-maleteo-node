@@ -13,7 +13,7 @@ router.post('/', (req, res, next) => {
         if (error) {
             return res.status(401).send(error.message);
         }
-        const token = jwt.sign({ user : req.body.email },'dasd', {expiresIn: '2 days'});
+        const token = jwt.sign({ user : req.body.email },'dasd', {expiresIn: '7 days'});
         //Send back the token to the user
         return res.json({ token });
     })(req, res, next);
