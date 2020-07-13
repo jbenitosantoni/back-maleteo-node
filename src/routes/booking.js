@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const Locker = require('../models/Locker');
 const Booking = require('../models/Booking');
 const moment = require('moment');
 const momentRange = require('moment-range');
@@ -23,29 +22,19 @@ router.post('/', async (req, res, next) => {
                 return res.status(401).send(error);
             }
 
-            if (user.isGuardian === false) {
-                const error = "You are not a guardian!";
-                return res.status(401).send(error);
-            }
-
-            if (req.body.lockerType !== 'Casa' || req.body.lockerType !== 'Hotel' || req.body.lockerType !== 'Tienda' || req.body.lockerType !== 'Trastero') {
-                const error = "Locker inputs types can only be Casa Hotel Tienda or Trastero!";
-                return res.status(401).send(error);
-            }
-
-            const newLocker = new Locker({
-                name: req.body.name,
-                description: req.body.description,
-                location: req.body.location,
+            const newBooking = new Booking({
+                dateEntry: req.body.dateEntry,
+                dateOut: req.body.dateOut,
+                comments: req.body.comments,
                 space: req.body.space,
-                lockerType: req.body.lockerType,
-                price: req.body.price,
+                lockerID: req.body.lockerID,
+                finalPrice: req.body.finalPrice,
                 userID: req.body.userID
             });
 
-            const savedLocker = await newLocker.save();
+            const savedBooking = await newBooking.save();
 
-            return res.status(201).send(savedLocker);
+            return res.status(201).send(savedBooking);
 
         } catch (err) {
             next(err);
@@ -84,7 +73,6 @@ router.get('/', async (req, res, next) => {
                                 const start = new Date(2012, 0, 15);
                                 const range = moment.range(startDate, endDate);
                                 if ((range.contains(checkIn)) === false && (range.contains(checkOut)) === false) {
-                                    console.log("uwu");
                                     lockersDisponibles.push(lockers[i]);
                                 }
                             }
@@ -93,7 +81,63 @@ router.get('/', async (req, res, next) => {
                 }
             }
 
-        res.send(lockersDisponibles);
+            res.send(lockersDisponibles);
+        } catch (err) {
+            next(err);
+        }
+    }
+});
+
+router.get('/user', async (req, res, next) => {
+    if (req.user) {
+        try {
+            const id = req.body.id;
+            const user = await User.findById(id);
+            const email = user.email;
+
+            if (!(req.user === email)) {
+                const error = "Token Invalido";
+                return res.status(401).send(error);
+            }
+
+            let bookings = await Booking.find();
+            let bookingMadeByUser = [];
+
+            for (let i = 0; i < bookings.length; i++) {
+                if (bookings.userID === id) {
+                    bookingMadeByUser.push(bookings[i]);
+                }
+            }
+
+            res.send(bookings);
+        } catch (err) {
+            next(err);
+        }
+    }
+});
+
+router.get('/host', async (req, res, next) => {
+    if (req.user) {
+        try {
+            const id = req.body.id;
+            const user = await User.findById(id);
+            const email = user.email;
+            const lockerID = req.body.lockerID
+            if (!(req.user === email)) {
+                const error = "Token Invalido";
+                return res.status(401).send(error);
+            }
+
+            let bookings = await Booking.find();
+            let bookingMadeByUser = [];
+
+            for (let i = 0; i < bookings.length; i++) {
+                if (bookings.lockerID === lockerID) {
+                    bookingMadeByUser.push(bookings[i]);
+                }
+            }
+
+            res.send(bookings);
         } catch (err) {
             next(err);
         }

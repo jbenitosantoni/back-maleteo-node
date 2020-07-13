@@ -3,8 +3,6 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
-const saltRounds = 10;
-
 router.put('/', async (req, res, next) => {
     if (req.user) {
         console.log(req.user);
