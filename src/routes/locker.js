@@ -53,9 +53,15 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.get('/', async (req, res, next) => {
+router.get('/availableLockers', async (req, res, next) => {
     if (req.user) {
         try {
+
+            if (!req.body.id) {
+                const error = "You must send the user ID!";
+                return res.status(401).send(error);
+            }
+
             const id = req.body.id;
             const user = await User.findById(id);
             const email = user.email;
@@ -66,7 +72,7 @@ router.get('/', async (req, res, next) => {
             }
             let lockers = await Locker.find();
             let bookings = await Booking.find();
-            let lockersDisponibles = [];
+            let availableLockers = [];
             const checkIn = new Date(req.body.checkIn);
             const checkOut = new Date(req.body.checkOut);
 
@@ -74,7 +80,7 @@ router.get('/', async (req, res, next) => {
                 let bookingID = []
                 bookingID.push(lockers[i].bookingID);
                 if (bookingID.length === 0) {
-                    lockersDisponibles.push(lockers[i]);
+                    availableLockers.push(lockers[i]);
                 } else {
                     for(let j = 0; j < bookings.length; j++) {
                         for (let x = 0; x < bookingID.length; x++) {
@@ -85,7 +91,7 @@ router.get('/', async (req, res, next) => {
                                 const range = moment.range(startDate, endDate);
                                 if ((range.contains(checkIn)) === false && (range.contains(checkOut)) === false) {
                                     console.log("uwu");
-                                    lockersDisponibles.push(lockers[i]);
+                                    availableLockers.push(lockers[i]);
                                 }
                             }
                         }
@@ -93,7 +99,42 @@ router.get('/', async (req, res, next) => {
                 }
             }
 
-        res.send(lockersDisponibles);
+        res.send(availableLockers);
+        } catch (err) {
+            next(err);
+        }
+    }
+});
+
+router.get('/hostLockers', async (req, res, next) => {
+    if (req.user) {
+        try {
+
+            if (!req.body.userID) {
+                const error = "You must send the user ID!";
+                return res.status(401).send(error);
+            }
+
+            const id = req.body.id;
+            const user = await User.findById(id);
+            const email = user.email;
+            const userID = req.body.userID;
+
+            if (!(req.user === email)) {
+                const error = "Token Invalido";
+                return res.status(401).send(error);
+            }
+
+            let lockers = await Locker.find();
+            let hostLockers = [];
+
+            for (let i = 0; i < lockers.length; i++) {
+                if (lockers.userID === userID) {
+                    hostLockers.push(lockers[i]);
+                }
+            }
+
+            res.send(hostLockers);
         } catch (err) {
             next(err);
         }
