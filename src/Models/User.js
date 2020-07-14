@@ -33,7 +33,7 @@ const UserSchema = new Schema(
             type: Boolean,
             require: false,
             default: false
-        }, googleID: {
+        }, googleId: {
             type: String,
             require: false
         }, facebookID: {

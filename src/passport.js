@@ -6,7 +6,7 @@ const User = require('./models/User');
 const passportJWT = require("passport-jwt");
 const JWTStrategy   = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-// Creamos los salts de bcrypt
+const GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
 const saltRounds = 10;
 
 passport.use(
@@ -129,3 +129,17 @@ passport.use(new JWTStrategy({
             });
     }
 ));
+
+passport.use(
+    new GoogleStrategy(
+        {
+            consumerKey: 1035066563057-trse1tc7j5be55347cnrp0uu7gnppje6.apps.googleusercontent.com,
+            consumerSecret: dSR9bcbMYt5lEsYBjw9D88NY,
+            callbackURL: "/auth/google/redirect"
+        },
+        accessToken => {
+            console.log("access token: ", accessToken);
+        }
+    )
+);
+

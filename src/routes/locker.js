@@ -17,6 +17,7 @@ router.post('/', async (req, res, next) => {
             const id = req.body.id;
             const user = await User.findById(id);
             const email = user.email;
+            const serviceFee = (req.body.price * 0.98).toFixed(2);
 
             if (!(req.user === email)) {
                 const error = "Token Invalido";
@@ -33,14 +34,25 @@ router.post('/', async (req, res, next) => {
                 return res.status(401).send(error);
             }
 
+            if (req.body.serviceFee) {
+                if (req.body.serviceFee !== serviceFee) {
+                    const error = "Service fee must be 2% of final price rounded to the second decimal!";
+                    return res.status(401).send(error);
+                }
+            } else {
+                const error = "Service fee must be sent!";
+                return res.status(401).send(error);
+            }
+
             const newLocker = new Locker({
                 name: req.body.name,
                 description: req.body.description,
                 location: req.body.location,
                 space: req.body.space,
                 lockerType: req.body.lockerType,
-                price: req.body.price,
-                userID: req.body.userID
+                price: req.body.price + req.body.serviceFee,
+                userID: req.body.userID,
+                photos: req.body.photos
             });
 
             const savedLocker = await newLocker.save();
@@ -87,7 +99,6 @@ router.get('/availableLockers', async (req, res, next) => {
                             if (bookings[j]._id == bookingID[x]) {
                                 let startDate = bookings[j].dateEntry;
                                 let endDate = bookings[j].dateOut;
-                                const start = new Date(2012, 0, 15);
                                 const range = moment.range(startDate, endDate);
                                 if ((range.contains(checkIn)) === false && (range.contains(checkOut)) === false) {
                                     console.log("uwu");
