@@ -133,8 +133,8 @@ passport.use(new JWTStrategy({
 passport.use(
     new GoogleStrategy(
         {
-            consumerKey: 1035066563057-trse1tc7j5be55347cnrp0uu7gnppje6.apps.googleusercontent.com,
-            consumerSecret: dSR9bcbMYt5lEsYBjw9D88NY,
+            consumerKey: "1035066563057-trse1tc7j5be55347cnrp0uu7gnppje6.apps.googleusercontent.com",
+            consumerSecret: "dSR9bcbMYt5lEsYBjw9D88NY",
             callbackURL: "/auth/google/redirect"
         },
         accessToken => {
