@@ -24,6 +24,7 @@ server.use(passport.initialize());
 server.use('/user', passport.authenticate('jwt', { session : false }), userRoutes );
 server.use('/locker', passport.authenticate('jwt', { session : false }), lockerRoutes );
 server.use('/login', loginRoutes);
+server.use('/register', registerRoutes);
 server.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
 }));
