@@ -12,9 +12,8 @@ router.post('/', (req, res, next) => {
 
         if (error) {
             return res.status(422).send(error.message);
-            return res.status(200).send(user);
         }
-
+        return res.status(200).send(user);
     })(req, res, next);
 
 });
