@@ -26,7 +26,12 @@ passport.use(
                 // Primero buscamos si el usuario existe en nuestra DB
                 const previousUser = await User.findOne({email: email});
 
-                if (!req.body.email || !req.body.password || !req.body.surname || !req.body.name || !req.body.dateOfBirth || !req.body.marketing ) {
+                if (!req.body.email ||
+                    !req.body.password ||
+                    !req.body.surname ||
+                    !req.body.name ||
+                    !req.body.dateOfBirth ||
+                    !req.body.marketing) {
                     const error = new Error('Some input is missing!');
                     return done(error);
                 }
