@@ -12,7 +12,7 @@ const registerRoutes = require('./routes/register');
 const lockerRoutes = require('./routes/locker');
 
 
-const PORT = 3001;
+const PORT = 3002;
 const server = express();
 
 server.use(express.json());
