@@ -17,7 +17,7 @@ router.post('/', async (req, res, next) => {
             const id = req.body.id;
             const user = await User.findById(id);
             const email = user.email;
-            const serviceFee = (req.body.price * 0.98).toFixed(2);
+            const serviceFee = (req.body.price * 0.02).toFixed(2);
 
             if (!(req.user === email)) {
                 const error = "Token Invalido";
@@ -29,28 +29,13 @@ router.post('/', async (req, res, next) => {
                 return res.status(401).send(error);
             }
 
-            if (req.body.lockerType !== 'Casa' || req.body.lockerType !== 'Hotel' || req.body.lockerType !== 'Tienda' || req.body.lockerType !== 'Trastero') {
-                const error = "Locker inputs types can only be Casa Hotel Tienda or Trastero!";
-                return res.status(401).send(error);
-            }
-
-            if (req.body.serviceFee) {
-                if (req.body.serviceFee !== serviceFee) {
-                    const error = "Service fee must be 2% of final price rounded to the second decimal!";
-                    return res.status(401).send(error);
-                }
-            } else {
-                const error = "Service fee must be sent!";
-                return res.status(401).send(error);
-            }
-
             const newLocker = new Locker({
                 name: req.body.name,
                 description: req.body.description,
                 location: req.body.location,
                 space: req.body.space,
                 lockerType: req.body.lockerType,
-                price: req.body.price + req.body.serviceFee,
+                price: +req.body.price + +serviceFee,
                 userID: req.body.userID,
                 photos: req.body.photos
             });
