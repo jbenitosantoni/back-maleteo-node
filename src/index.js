@@ -16,7 +16,7 @@ const lockerRoutes = require('./routes/locker');
 const PORT = 3001;
 const server = express();
 
-server.use(cors());
+server.use(cors({origin: '*'}));
 
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
