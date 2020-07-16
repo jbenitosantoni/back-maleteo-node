@@ -75,7 +75,11 @@ router.get('/availableLockers', async (req, res, next) => {
 
             for (let i = 0; i < lockers.length; i++) {
                 let bookingID = []
+                for (let h = 0; h < lockers[i].bookingID.length; h++) {
+                if (lockers[i].bookingID[h] !== null) {
                 bookingID.push(lockers[i].bookingID);
+                }
+                }
                 if (bookingID.length === 0) {
                     availableLockers.push(lockers[i]);
                 } else {

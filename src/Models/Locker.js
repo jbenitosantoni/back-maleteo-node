@@ -31,6 +31,9 @@ const LockerSchema = new Schema(
         }, photos: {
             type: Array,
             require: true
+        }, bookingID: {
+            type: Array,
+            require: true
         }
     },
     {
