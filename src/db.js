@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-
-const mongoURI = "mongodb://localhost:27017/maleteo?authSource=admin";
+const mongoURI = "mongodb://localhost:27017/admin?authSource=admin";
 const options = {
     user: "root",
     pass: "admin",
@@ -8,5 +7,4 @@ const options = {
     keepAliveInitialDelay: 300000,
     useNewUrlParser: true
 };
-
 mongoose.connect(mongoURI, options);

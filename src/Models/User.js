@@ -4,26 +4,39 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
     {
-        email: {
+        email: 
+        {
             type: String,
             unique: true,
             require: true
-        }, password: {
+        }, 
+        password: 
+        {
             type: String,
             require: true
-        }, name: {
+        }, 
+        name: 
+        {
             type: String,
             require: true
-        }, surname: {
+        }, 
+        surname: 
+        {
             type: String,
             require: true
-        }, dateOfBirth: {
+        }, 
+        dateOfBirth: 
+        {
             type: Date,
             require: true
-        }, marketing: {
+        }, 
+        marketing: 
+        {
             type: Boolean,
             required: true
-        }, profileDescription: {
+        }, 
+        profileDescription: 
+        {
             type: String,
             require: false
         }, profileImage: {

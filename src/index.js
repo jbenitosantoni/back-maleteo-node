@@ -1,6 +1,5 @@
 const express = require('express');
 const passport = require('passport');
-const session = require('express-session')
 const cors = require('cors');
 
 require('./db.js');
@@ -16,12 +15,13 @@ const lockerRoutes = require('./routes/locker');
 const PORT = 3001;
 const server = express();
 
+server.use(cors({origin: '*'}));
+
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 server.use(express.static('public'));
 server.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 server.use(passport.initialize());
-server.use(cors({origin: 'http://localhost:3000'}));
 server.use('/user', passport.authenticate('jwt', { session : false }), userRoutes );
 server.use('/locker', passport.authenticate('jwt', { session : false }), lockerRoutes );
 server.use('/login', loginRoutes);
