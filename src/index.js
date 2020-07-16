@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
-const session = require('express-session')
+const session = require('express-session');
+const cors = require('cors');
 
 require('./db.js');
 require('./passport');
@@ -14,6 +15,8 @@ const lockerRoutes = require('./routes/locker');
 
 const PORT = 3001;
 const server = express();
+
+server.use(cors());
 
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
