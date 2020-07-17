@@ -115,21 +115,6 @@ passport.use(
     )
 );
 
-passport.use(new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-        secretOrKey   : 'sdsad'
-    },
-    function (jwtPayload, cb) {
-        return User.findOneById(jwtPayload.id)
-            .then(user => {
-                return cb(null, user);
-            })
-            .catch(err => {
-                return cb(err);
-            });
-    }
-));
-
 passport.use(
     new GoogleStrategy(
         {
