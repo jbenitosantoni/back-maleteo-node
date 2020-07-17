@@ -11,12 +11,14 @@ router.post('/', async (req, res, next) => {
     if (req.user) {
         try {
             if (!req.body.id) {
-                const error = "You must send user ID";
+                const error = "You must send the user ID!";
                 return res.status(401).send(error);
             }
+
             const id = req.body.id;
             const user = await User.findById(id);
             const email = user.email;
+
             const serviceFee = (req.body.price * 0.02).toFixed(2);
 
             if (!(req.user === email)) {
@@ -67,20 +69,20 @@ router.get('/availableLockers', async (req, res, next) => {
                 const error = "Token Invalido";
                 return res.status(401).send(error);
             }
+
             let lockers = await Locker.find();
             let bookings = await Booking.find();
             let availableLockers = [];
             const checkIn = new Date(req.body.checkIn);
             const checkOut = new Date(req.body.checkOut);
-
+            let bookingID = []
             for (let i = 0; i < lockers.length; i++) {
-                let bookingID = []
                 for (let h = 0; h < lockers[i].bookingID.length; h++) {
                 if (lockers[i].bookingID[h] !== null) {
                 bookingID.push(lockers[i].bookingID);
                 }
                 }
-                if (bookingID.length === 0) {
+                if (bookingID.length === 0){
                     availableLockers.push(lockers[i]);
                 } else {
                     for(let j = 0; j < bookings.length; j++) {
@@ -98,7 +100,6 @@ router.get('/availableLockers', async (req, res, next) => {
                     }
                 }
             }
-
         res.send(availableLockers);
         } catch (err) {
             next(err);
