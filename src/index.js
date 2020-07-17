@@ -11,7 +11,6 @@ const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register');
 const lockerRoutes = require('./routes/locker');
 
-
 const PORT = 3001;
 const server = express();
 
